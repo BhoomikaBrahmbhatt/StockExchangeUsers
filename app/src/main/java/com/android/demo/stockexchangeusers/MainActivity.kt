@@ -1,10 +1,11 @@
 package com.android.demo.stockexchangeusers
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.android.demo.stockexchangeusers.adapter.UserListAdapter
 import com.android.demo.stockexchangeusers.databinding.ActivityMainBinding
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepository)).get(MainViewModel::class.java)
 
 
-        viewModel.movieList.observe(this, {
+        viewModel.usersList.observe(this, {
             adapter.setUsers(it)
         })
 
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
 
-        viewModel.loading.observe(this, Observer {
+        viewModel.loading.observe(this, {
             if (it) {
                 binding.progressDialog.visibility = View.VISIBLE
             } else {
@@ -51,8 +52,24 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.getAllMovies(PAGE,PAGE_SIZE,ORDER, SORT, SITE, FILTER)
+        viewModel.getAllUsers(PAGE,PAGE_SIZE,ORDER, SORT, SITE, FILTER)
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_item,menu)
+        val item = menu?.findItem(R.id.search_action)
+        val searchView = item?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                (binding.recyclerview.adapter as UserListAdapter).filter(newText)
+                return false
+            }
+        })
+        return super.onCreateOptionsMenu(menu)
+    }
 }

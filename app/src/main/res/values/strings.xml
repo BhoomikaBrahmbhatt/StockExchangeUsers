@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">StockExchange Users</string>
+    <string name="app_name">Stock Exchange Users</string>
+    <string name="reputation">Reputation</string>
+    <string name="location">Location</string>
+    <string name="Badges">Badges</string>
+    <string name="gold">Gold badge</string>
+    <string name="one">1</string>
+    <string name="silver">Silver badge</string>
+    <string name="bronze">Bronze badge</string>
+    <string name="Tags">Top Tags</string>
 </resources>
