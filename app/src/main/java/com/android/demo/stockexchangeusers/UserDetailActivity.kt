@@ -80,16 +80,12 @@ class UserDetailActivity : AppCompatActivity()  {
             binding.textBronzeBadge.text = data.badgeCounts?.bronze.toString()
          binding.textCreationDate.text = data.creationDate.toString()
 
-
-
         data.userId?.let {
                 viewModel.getAllTags(
                     it,
                     AllApi.SITE
                 )
             }
-
-
 
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

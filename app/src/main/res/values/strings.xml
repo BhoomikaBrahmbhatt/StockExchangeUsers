@@ -8,4 +8,5 @@
     <string name="silver">Silver badge</string>
     <string name="bronze">Bronze badge</string>
     <string name="Tags">Top Tags</string>
+    <string name="creation">Creation Date</string>
 </resources>
