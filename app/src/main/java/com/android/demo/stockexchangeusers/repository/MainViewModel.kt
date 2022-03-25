@@ -42,13 +42,11 @@ class MainViewModel constructor(private val mainRepository: MainRepository) : Vi
 
     fun getAllTags(
         userId:Int,
-        order:String,
-        sort:String,
         site:String) {
 
         jobDetail = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             loading.postValue(true)
-            val response = mainRepository.getTagdetails(userId, order, sort, site)
+            val response = mainRepository.getTagdetails(userId, site)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     tagsList.postValue(response.body()?.items)

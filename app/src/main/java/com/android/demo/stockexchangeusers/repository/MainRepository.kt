@@ -12,8 +12,6 @@ class MainRepository constructor(private val retrofitService: RetrofitService) {
     filter:String) = retrofitService.getAllUsers(page, pagesize, order, sort, site,filter)
 
     suspend fun getTagdetails(userId : Int,
-                              order:String,
-                              sort:String,
                               site:String
     ) = retrofitService.getTagDetail(userId, site)
 

@@ -86,8 +86,6 @@ class UserDetailActivity : AppCompatActivity()  {
         data.userId?.let {
             viewModel.getAllTags(
                 it,
-                AllApi.ORDER,
-                AllApi.SORT,
                 AllApi.SITE
             )
         }

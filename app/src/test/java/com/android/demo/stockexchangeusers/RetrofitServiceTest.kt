@@ -2,6 +2,7 @@ package com.android.demo.stockexchangeusers
 
 import com.android.demo.stockexchangeusers.network.RetrofitService
 import com.android.demo.stockexchangeusers.repository.AllApi
+import com.android.demo.stockexchangeusers.repository.AllApi.TAG_ID
 import com.android.demo.stockexchangeusers.repository.AllApi.USER_LIST
 import com.google.gson.Gson
 import junit.framework.Assert.assertEquals
@@ -57,6 +58,20 @@ class RetrofitServiceTest {
             assertEquals(true, response.body()?.items.isNullOrEmpty())
 
 
+        }
+    }
+    @Test
+    fun `get all top tags api test`() {
+        runBlocking {
+            val mockResponse = MockResponse()
+            mockWebServer.enqueue(mockResponse.setBody("{}"))
+            val response = apiService.getTagDetail(
+                TAG_ID,
+                AllApi.FILTER
+            )
+            val request = mockWebServer.takeRequest()
+            // assertEquals(USER_LIST,request.getUR)
+            assertEquals(true, response.body()?.items.isNullOrEmpty())
         }
     }
 

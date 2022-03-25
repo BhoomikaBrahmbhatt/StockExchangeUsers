@@ -2,7 +2,9 @@ package com.android.demo.stockexchangeusers
 
 import com.android.demo.stockexchangeusers.network.RetrofitService
 import com.android.demo.stockexchangeusers.repository.AllApi
+import com.android.demo.stockexchangeusers.repository.AllApi.TAG_ID
 import com.android.demo.stockexchangeusers.repository.MainRepository
+import com.android.demo.stockexchangeusers.repository.TagsResponse
 import com.android.demo.stockexchangeusers.repository.UsersResponse
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
@@ -53,5 +55,20 @@ class MainRepositoryTest {
         }
 
     }
+    @Test
+    fun `get all taglist test`() {
+        runBlocking {
+            val responsedata = apiService.getTagDetail(
+                TAG_ID,
+                AllApi.SITE
+            )
+            Mockito.`when`(responsedata).thenReturn(Response.success(TagsResponse()))
+            val response = mainRepository.getTagdetails(
+                TAG_ID,
+                AllApi.SITE
+            )
+            assertEquals(TagsResponse(), response.body())
+        }
 
+    }
 }

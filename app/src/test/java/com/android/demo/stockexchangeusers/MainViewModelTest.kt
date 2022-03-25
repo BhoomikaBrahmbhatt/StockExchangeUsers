@@ -37,7 +37,6 @@ class MainViewModelTest {
     val instantTaskExecutionRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
 
-
     private val itemUser  = Items(
         BadgeCounts(8,1,0),35,12345678,12,"London",
         "https://www.gravatar.com/avatar/894891fa86576454f1cab28c28625425?s=256&d=identicon&r=PG",
@@ -51,8 +50,8 @@ class MainViewModelTest {
         Dispatchers.setMain(testDispatcher)
         mainRepository = MainRepository(apiService)
         mainViewModel = MainViewModel(mainRepository)
-         userList.add(itemUser)
-         userResponse = UsersResponse(userList , true,300,299 )
+        userList.add(itemUser)
+        userResponse = UsersResponse(userList , true,300,299 )
         userEmptyResponse= UsersResponse(emptyuserList , false,300,299 )
     }
 
