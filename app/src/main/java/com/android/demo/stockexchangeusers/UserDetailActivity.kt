@@ -1,17 +1,12 @@
 package com.android.demo.stockexchangeusers
 
-import android.content.Context
-import android.icu.text.SimpleDateFormat
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.android.demo.stockexchangeusers.adapter.TagsListAdapter
-import com.android.demo.stockexchangeusers.adapter.UserListAdapter
 import com.android.demo.stockexchangeusers.databinding.ActivityUserDetailBinding
 import com.android.demo.stockexchangeusers.network.RetrofitService
 import com.android.demo.stockexchangeusers.repository.*
@@ -19,11 +14,6 @@ import com.android.demo.stockexchangeusers.repository.AllApi.USER_DATA
 import com.android.demo.stockexchangeusers.utils.EspressoIdlingResource
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
-import java.sql.Timestamp
-import java.text.DateFormat
-import java.time.*
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class UserDetailActivity : AppCompatActivity()  {
     private lateinit var binding: ActivityUserDetailBinding
@@ -79,7 +69,6 @@ class UserDetailActivity : AppCompatActivity()  {
                 binding.progressDialog.visibility = View.GONE
             }
         })
-      //  if(userdata.isNotEmpty()) {
             val data = Gson().fromJson(userdata, Items::class.java)
 
             Glide.with(this).load(data.profileImage).into(binding.imageview)
@@ -89,16 +78,17 @@ class UserDetailActivity : AppCompatActivity()  {
             binding.textGoldBadge.text = data.badgeCounts?.gold.toString()
             binding.textSilverBadge.text = data.badgeCounts?.silver.toString()
             binding.textBronzeBadge.text = data.badgeCounts?.bronze.toString()
+         binding.textCreationDate.text = data.creationDate.toString()
 
-            binding.textCreationDate.text = data.creationDate.toString()
 
-            data.userId?.let {
+
+        data.userId?.let {
                 viewModel.getAllTags(
                     it,
                     AllApi.SITE
                 )
             }
-      //  }
+
 
 
     }
@@ -111,5 +101,6 @@ class UserDetailActivity : AppCompatActivity()  {
         }
         return super.onOptionsItemSelected(item)
     }
+
 
 }
