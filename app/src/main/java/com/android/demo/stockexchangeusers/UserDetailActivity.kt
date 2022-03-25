@@ -16,6 +16,7 @@ import com.android.demo.stockexchangeusers.databinding.ActivityUserDetailBinding
 import com.android.demo.stockexchangeusers.network.RetrofitService
 import com.android.demo.stockexchangeusers.repository.*
 import com.android.demo.stockexchangeusers.repository.AllApi.USER_DATA
+import com.android.demo.stockexchangeusers.utils.EspressoIdlingResource
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import java.sql.Timestamp
@@ -35,6 +36,7 @@ class UserDetailActivity : AppCompatActivity()  {
 
         binding = ActivityUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        EspressoIdlingResource.increment()
 
         val retrofitService = RetrofitService.getInstance()
         val mainRepository = MainRepository(retrofitService)
@@ -46,17 +48,7 @@ class UserDetailActivity : AppCompatActivity()  {
             setDisplayShowHomeEnabled(true)
         }
         val userdata = intent.extras!!.get(USER_DATA) as String
-        val data = Gson().fromJson(userdata, Items::class.java)
 
-        Glide.with(this).load(data.profileImage).into(binding.imageview)
-        binding.textName.text = data.displayName
-        binding.textReputaionValue.text = data.reputation.toString()
-        binding.textLocationValue.text = data.location
-        binding.textGoldBadge.text = data.badgeCounts?.gold.toString()
-        binding.textSilverBadge.text = data.badgeCounts?.silver.toString()
-        binding.textBronzeBadge.text = data.badgeCounts?.bronze.toString()
-
-        binding.textCreationDate.text=data.creationDate.toString()
         binding.recyclerview.adapter = adapter
 
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepository)).get(MainViewModel::class.java)
@@ -69,10 +61,15 @@ class UserDetailActivity : AppCompatActivity()  {
             binding.textlabeltags.visibility = View.VISIBLE
             else
                 binding.textlabeltags.visibility = View.GONE
+
+            EspressoIdlingResource.decrement()
+
         })
 
         viewModel.errorMessage.observe(this, {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            EspressoIdlingResource.decrement()
+
         })
 
         viewModel.loading.observe(this, {
@@ -82,13 +79,28 @@ class UserDetailActivity : AppCompatActivity()  {
                 binding.progressDialog.visibility = View.GONE
             }
         })
+      //  if(userdata.isNotEmpty()) {
+            val data = Gson().fromJson(userdata, Items::class.java)
 
-        data.userId?.let {
-            viewModel.getAllTags(
-                it,
-                AllApi.SITE
-            )
-        }
+            Glide.with(this).load(data.profileImage).into(binding.imageview)
+            binding.textName.text = data.displayName
+            binding.textReputaionValue.text = data.reputation.toString()
+            binding.textLocationValue.text = data.location
+            binding.textGoldBadge.text = data.badgeCounts?.gold.toString()
+            binding.textSilverBadge.text = data.badgeCounts?.silver.toString()
+            binding.textBronzeBadge.text = data.badgeCounts?.bronze.toString()
+
+            binding.textCreationDate.text = data.creationDate.toString()
+
+            data.userId?.let {
+                viewModel.getAllTags(
+                    it,
+                    AllApi.SITE
+                )
+            }
+      //  }
+
+
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

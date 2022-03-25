@@ -19,6 +19,7 @@ import com.android.demo.stockexchangeusers.repository.AllApi.SORT
 import com.android.demo.stockexchangeusers.repository.MainRepository
 import com.android.demo.stockexchangeusers.repository.MainViewModel
 import com.android.demo.stockexchangeusers.repository.MyViewModelFactory
+import com.android.demo.stockexchangeusers.utils.EspressoIdlingResource
 
 class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
@@ -32,16 +33,18 @@ class MainActivity : AppCompatActivity() {
         val retrofitService = RetrofitService.getInstance()
         val mainRepository = MainRepository(retrofitService)
         binding.recyclerview.adapter = adapter
-
+EspressoIdlingResource.increment()
         viewModel = ViewModelProvider(this, MyViewModelFactory(mainRepository)).get(MainViewModel::class.java)
 
 
         viewModel.usersList.observe(this, {
             adapter.setUsers(it)
+            EspressoIdlingResource.decrement()
         })
 
         viewModel.errorMessage.observe(this, {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            EspressoIdlingResource.decrement()
         })
 
         viewModel.loading.observe(this, {
