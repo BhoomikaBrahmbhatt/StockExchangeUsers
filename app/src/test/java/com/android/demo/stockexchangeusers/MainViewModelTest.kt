@@ -29,7 +29,8 @@ class MainViewModelTest {
     lateinit var mainRepository: MainRepository
     var userList = ArrayList<Items>()
     var emptyuserList = ArrayList<Items>()
-
+    var tagList = ArrayList<Tags>()
+    var emptytagList = ArrayList<Tags>()
     @Mock
     lateinit var apiService: RetrofitService
 
@@ -42,8 +43,12 @@ class MainViewModelTest {
         "https://www.gravatar.com/avatar/894891fa86576454f1cab28c28625425?s=256&d=identicon&r=PG",
         "Test User")
 
+    private val tags = Tags(1,0,1,0,"java")
+
     lateinit var userResponse : UsersResponse
     lateinit var userEmptyResponse : UsersResponse
+    lateinit var tagResponse : TagsResponse
+    lateinit var tagEmptyResponse: TagsResponse
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
@@ -51,8 +56,11 @@ class MainViewModelTest {
         mainRepository = MainRepository(apiService)
         mainViewModel = MainViewModel(mainRepository)
         userList.add(itemUser)
+        tagList.add(tags)
         userResponse = UsersResponse(userList , true,300,299 )
         userEmptyResponse= UsersResponse(emptyuserList , false,300,299 )
+        tagResponse = TagsResponse(tagList)
+        tagEmptyResponse = TagsResponse(emptytagList)
     }
 
     @Test
@@ -106,5 +114,44 @@ class MainViewModelTest {
             assertEquals(emptyuserList, result)
         }
     }
+
+
+
+    @Test
+    fun getAllTopTagsTest() {
+        runBlocking {
+            Mockito.`when`(mainRepository.getTagdetails(
+                AllApi.TAG_ID,
+                AllApi.SITE
+            ))
+                .thenReturn(Response.success(tagResponse))
+
+            mainViewModel.getAllTags(
+                AllApi.TAG_ID,
+                AllApi.SITE
+            )
+            val result = mainViewModel.tagsList.getOrAwaitValue()
+            assertEquals( tagList, result)
+        }
+    }
+
+
+    @Test
+    fun `empty top tag list test`() {
+        runBlocking {
+            Mockito.`when`(mainRepository.getTagdetails(
+                AllApi.TAG_ID,
+                AllApi.SITE
+            ))
+                .thenReturn(Response.success(tagEmptyResponse))
+            mainViewModel.getAllTags(
+                AllApi.TAG_ID,
+                AllApi.SITE
+            )
+            val result = mainViewModel.tagsList.getOrAwaitValue()
+            assertEquals(emptytagList, result)
+        }
+    }
+
 
 }

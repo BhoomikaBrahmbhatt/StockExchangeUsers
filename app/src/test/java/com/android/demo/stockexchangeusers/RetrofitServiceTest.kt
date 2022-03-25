@@ -19,9 +19,6 @@ import okhttp3.MediaType
 
 import org.hamcrest.CoreMatchers
 
-
-
-
 class RetrofitServiceTest {
 
     lateinit var mockWebServer: MockWebServer

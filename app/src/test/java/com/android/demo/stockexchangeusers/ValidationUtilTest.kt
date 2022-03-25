@@ -1,6 +1,5 @@
 package com.android.demo.stockexchangeusers
 
-import android.graphics.Movie
 import com.android.demo.stockexchangeusers.repository.BadgeCounts
 import com.android.demo.stockexchangeusers.repository.Items
 import com.android.demo.stockexchangeusers.utils.ValidationUtil
